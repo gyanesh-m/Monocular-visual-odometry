@@ -3,14 +3,12 @@
 This project aims to tackle the problem of egocentric activity recognition based on the information 
 available from video data. It achieves this by the fusion of multi stream convnet
 architecture to learn the spatial and temporal features from video data.
-The four streams comprise of the following parts:
+The three streams comprise of the following parts:
+
+
 	*	Single stream
 	* 	Optical flow
-	* 	Stabilised optical flow
-	*	Global motion flow
-
-![Model](https://doc-10-9k-docs.googleusercontent.com/docs/securesc/tet8mqvi6o52dkfqbm5i178o0krd4rpu/up49gqo0uksrb0vln50lsbcfd51n6a8p/1527177600000/01456690796608472407/01456690796608472407/1N1JcvD8j52bIqU5vHHrf4HMjVE-L-bPl?e=download)
-
+    *   Rigid motion flow
       
 ## Usage
 
