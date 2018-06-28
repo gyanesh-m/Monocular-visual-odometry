@@ -1,11 +1,11 @@
 #!/usr/bin/env python
 import os
-import argparse
 from subprocess import call
 from glob import glob
 import shutil
+from parser import main
 OPTICAL_FLOW_MODEL='FlowNet2'
-DEPTH_MODEL="geonet"
+DEPTH_MODEL="mega-depth"
 
 class Preprocess(object):
     """Extracts images from videos for the two formats. Thereafter, it generates images for all the four phases.
@@ -60,7 +60,7 @@ class Preprocess(object):
                 call(['ffmpeg', '-i', os.path.join(self.data_dir, file_name, ' '.join(file_line.split(" ")[:-3])+'.mp4')
                       , os.path.join(single_frame_loc, labels[key][file_line[:-4]], file_name[:22]+'%06d.png')])
     
-    def generate_optical_flow_files(self):
+    def generate_optical_flow(self):
         """Generates the flow files for the images in the dir specified(default Single dir)
         """
         for folder in os.listdir(os.path.join(self.img_dir,"Single")):
@@ -87,52 +87,44 @@ class Preprocess(object):
                     os.rename(flow_files[:-3]+'.png',os.path.join(self.img_dir,'OpticalFlow',folder))
                 shutil.rmtree(flow_dir)
 
-    def generate_mono_depth(self):
+    def generate_depth(self):
         """Generates monocular depth image for the images in the data directory."""
         if(self.format==1):
-        #For EGTEA data format.
+            #For EGTEA data format.
             for folder in os.listdir(os.path.join(self.img_dir,"Single")):
+                print("Doing for -",folder)
                 if(os.path.isdir(os.path.join(self.img_dir,"Single",folder))):
                     try:
+                        out_dir=os.path.join(self.img_dir,"../Depth",folder)
                         os.makedirs(os.path.join(self.img_dir,'Depth',folder))
                     except OSError as e:
-                        pass
-                    cmd=['python',DEPTH_MODEL+'_main.py','--mode','test_depth','--dataset_dir',
-                    os.path.join(self.img_dir,'Single',folder),'--init_ckpt_file',self.model_checkpt,
-                    '--batch_size',self.batch_size,"--output_dir",os.path.join(self.img_dir,'Depth',folder)]
-                    call(cmd)
+                        print(e)
+                    datasets=os.path.join(self.img_dir,'Single',folder)
+                    print(datasets,"#"*10)
+                    cmd_GEO=['python',os.path.join(self.model_dir,'geonet_main.py'),'--mode','test_depth','--dataset_dir',
+                        os.path.join(self.img_dir,'Single',folder+'/'),'--init_ckpt_file',self.model_checkpt,
+                        '--batch_size',self.batch_size,"--output_dir",out_dir]
+                    cmd_sfm=['python',os.path.join(self.model_dir,'test_kitti_depth.py'), '--dataset_dir', os.path.join(self.img_dir,'Single',folder+'/'),'--output_dir',out_dir,'--ckpt_file',self.model_checkpt]
+                    cmd_mega=['python',os.path.join(self.model_dir,'demo.py'),'--img-dir',os.path.join(self.img_dir,'Single',folder+'/'),'--output-dir',out_dir]
+                    call(cmd_mega)
         if(self.format==2):
         #For any general Image folder format
             if(os.path.isdir(os.path.join(self.img_dir))):
                 try:
-                    out_dir=os.path.join(self.img_dir,"../Depth")
+                    folder_name=self.img_dir.split("/")[-2]
+                    out_dir=os.path.join(self.img_dir,"../Depth",folder_name)
                     os.makedirs(out_dir)
                 except OSError as e:
                     pass
-                cmd=['python',os.path.join(self.model_dir,'geonet_main.py'),'--mode','test_depth','--dataset_dir',
+                cmd_geo=['python',os.path.join(self.model_dir,'geonet_main.py'),'--mode','test_depth','--dataset_dir',
                     os.path.join(self.img_dir),'--init_ckpt_file',self.model_checkpt,
                     '--batch_size',self.batch_size,"--output_dir",out_dir]
-                call(cmd)
+                cmd_mega=['python',os.path.join(self.model_dir,'demo.py'),'--img-dir',os.path.join(self.img_dir),"--output-dir",out_dir]
+                call(cmd_mega)
 
-def main():
-    parser = argparse.ArgumentParser(description="Generates the training data for specified flows.",
-                                     formatter_class=argparse.RawTextHelpFormatter)
-    parser.add_argument('-d', '--dir', type=str, help="""Video data directory path.\nThis is the path of the folder which contains subfolders""")
-    parser.add_argument('-s', '--split', type=str, help='Location of Train/Test split file')
-    parser.add_argument('-f', '--format-name', type=int,
-                        help="Specify the format number according to the following mapping-\n"+
-                        "1. EGTEA+ dataset format \n2. Simple Image Folder",default=1)
-    parser.add_argument("-i","--image-dir",type=str,help="Location of image directory",
-                        default=os.path.join(os.getcwd(),"./../data/train/"))
-    parser.add_argument("-md","--model-dir",type=str,help="Location of the optical flow model used.",
-                        default=os.path.join(os.getcwd(),"/flownet2-pytorch/utils/flownet2-pytorch"))
-    parser.add_argument("-mc", "--model-checkpt", type=str, help="Location of optical flow model checkpoint",
-                        default=os.path.join(os.getcwd(),"/flownet2-pytorch/utils/flownet2-pytorch/FlowNet2_checkpoint.pth.tar"))
-    parser.add_argument("--batch_size",type=str,help="Mention the batch size for depth and optical flow.",default='8')
-    parser.add_argument("--mode",type=int, choices=range(0,4),help="Specify the operation to perform.\n0. Default mode "+
-                        "which runs all the operations \n1. Simple image\n2. Optical flow image\n3. Depth image"
-    """\n""")
-    args = parser.parse_args()
+
+if __name__ == '__main__':
+    args=main()
     data_dir = args.dir
     split_dir = args.split
     format_name = args.format_name
@@ -145,9 +137,6 @@ def main():
     if(mode==1 or mode==0):
         process_obj.extract_images()
     elif(mode==2 or mode==0):
-        process_obj.generate_optical_flow_files()
+        process_obj.generate_optical_flow()
     elif(mode==3 or mode==0):
-        process_obj.generate_mono_depth()
-
-if __name__ == '__main__':
-    main()
+        process_obj.generate_depth()
