@@ -1,0 +1,4 @@
+./../../data/gyanesh//results//OchsBroxMalik8_0001_0007_0000060.00/train/
+./../../data/gyanesh//results//OchsBroxMalik8_0008_0007_0000060.00/train/
+./../../data/gyanesh//results//OchsBroxMalik8_0015_0007_0000060.00/train/
+./../../data/gyanesh//results//OchsBroxMalik8_0022_0008_0000060.00/train/

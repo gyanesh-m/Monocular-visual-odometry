@@ -10,7 +10,7 @@ Here f specifies the file format
 For complete parameter info : python parser.py -h
 '
 python parser.py -d input_dir -o output_dir -f 2 -m 0 ;
-cd moseg;
+cd motion-seg;
 
 : '
 Runs motion segmentation
