@@ -1,33 +1,35 @@
 ## Multi-modal Egocentric Perception ##
 
 This project aims to tackle the problem of egocentric activity recognition based on the information 
-available from video data. It achieves this by the fusion of multi stream convnet
-architecture to learn the spatial and temporal features from video data.
-The three streams comprise of the following parts:
-
+available from video data. It achieves this by utilising the input modality from optical flow and depth estimation.
+The optical flow output is further used in Visual Odometry task to estimate the trajectory of the camera motion.
+The depth output is utilised to generate the 3d point cloud from the video.
+The current pipeline consists of the following modules:
 
   * Single stream
   * Optical flow
   * Depth
   * Visual Odometry
+  * 3D point cloud
 
 ### Dependencies
 
-To install the dependencies, run 
+To install all the dependencies, run 
 
 ``` 
 pip install -r requirements.txt
 ```
 
 Some other repo which needs to be downloaded locally are:
-1. **FlowNet2** [link](https://github.com/NVIDIA/flownet2-pytorch)
-2. **MegaDepth** [link](https://github.com/lixx2938/MegaDepth)
+
+1. **FlowNet2** [[link](https://github.com/NVIDIA/flownet2-pytorch)]
+2. **MegaDepth** [[link](https://github.com/lixx2938/MegaDepth)]
 
 I have made few changes to them so I have included them in the utils folder.
 
 ### Pretrained models
 
-Pretrained model for mega depth can be found [here](http://www.cs.cornell.edu/projects/megadepth/dataset/models/best_generalization_net_G.pth) and for FlowNet2.0, it can be found [here](https://drive.google.com/file/d/1hF8vS6YeHkx3j2pfCeQqqZGwA_PJq_Da/view?usp=sharing).
+Pretrained models which I have used for mega depth can be found [here](http://www.cs.cornell.edu/projects/megadepth/dataset/models/best_generalization_net_G.pth) and for FlowNet2.0, it can be found [here](https://drive.google.com/file/d/1hF8vS6YeHkx3j2pfCeQqqZGwA_PJq_Da/view?usp=sharing).
 
 
 ### Code Structure
@@ -55,8 +57,10 @@ Pretrained model for mega depth can be found [here](http://www.cs.cornell.edu/pr
       
 ### Single frame, Optical Flow, Depth prediction
 
+Given an image folder/ a video folder as input, the ``parser.py`` can extract the individual frames, optical flow
+and depth estimation.
 
-python parser.py -h
+
 ```
 python parser.py -h
 usage: parser.py [-h] [-d DIR] [-s SPLIT] [-f {1,2}] [-i IMAGE_DIR]
