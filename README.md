@@ -15,12 +15,24 @@ The three streams comprise of the following parts:
 
 To install the dependencies, run 
 
-```
+``` 
 pip install -r requirements.txt
 ```
 
-### Directory Tree
+Some other repo which needs to be downloaded locally are:
+1. **FlowNet2** [link](https://github.com/NVIDIA/flownet2-pytorch)
+2. **MegaDepth** [link](https://github.com/lixx2938/MegaDepth)
 
+I have made few changes to them so I have included them in the utils folder.
+
+### Pretrained models
+
+Pretrained model for mega depth can be found [here](http://www.cs.cornell.edu/projects/megadepth/dataset/models/best_generalization_net_G.pth) and for FlowNet2.0, it can be found [here](https://drive.google.com/file/d/1hF8vS6YeHkx3j2pfCeQqqZGwA_PJq_Da/view?usp=sharing).
+
+
+### Code Structure
+
+```
 .
 ├── code
 │   ├── color_flow
@@ -39,7 +51,7 @@ pip install -r requirements.txt
 └── utils
     ├── flownet2-pytorch
     └── MegaDepth
-
+```
       
 ### Single frame, Optical Flow, Depth prediction
 
@@ -85,7 +97,7 @@ optional arguments:
 
 
 ```
-### Run
+### Run as
 ```
 python parser.py -d <input directory path> --output_dir <output directory path> --mode <any one of 0,1,2,3> --batch_size <number> -f < 2 if it is a directory of videos or images >
 ```
@@ -102,9 +114,7 @@ Using opencv, it utilises the output from FlowNet2.0 to generate the trajectory.
 python odometry2d.py
 ```
 
-### Pretrained models
 
-Pretrained model for mega depth can be found [here]() and for FlowNet2.0, it can be found [here]().
 
 ### Future Scope
 
