@@ -1,7 +1,16 @@
-## Multi-modal Egocentric Perception ##
+# GSOC 2018 Project 
+## Contact:
+Gyanesh Malhotra, f20140495@goa.bits-pilani.ac.in
 
-This project aims to tackle the problem of egocentric activity recognition based on the information 
-available from video data. It achieves this by utilising the input modality from optical flow and depth estimation.
+
+## Organization :
+Red Hen Lab  
+Cognitive Vision lab, University of Bremen  
+Mentors - Dr. Mehul Bhatt, Jakob Suchan, Sri Krishna  
+
+## Visual odometry and 3d point cloud generation ##
+This project is a subtopic of **Multimodal egocentric activity recognition** . It utilises the information 
+extracted from video data. It achieves this by utilising the input modality from optical flow and depth estimation.
 The optical flow output is further used in Visual Odometry task to estimate the trajectory of the camera motion.
 The depth output is utilised to generate the 3d point cloud from the video.
 The current pipeline consists of the following modules:
