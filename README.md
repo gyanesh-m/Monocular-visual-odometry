@@ -122,9 +122,21 @@ In other cases, model directory and checkpoint need to be specified.
 ### Visual Odometry
 
 Using opencv, it utilises the output from FlowNet2.0 to generate the trajectory.
+It also displays the visualisation of flow fields and flow hsv values.
 
 ```
-python odometry2d.py
+usage: odometry2d.py [-h] [--img IMG] [--flo FLO] [--pose POSE]
+                     [--output OUTPUT]
+
+Computes the trajectory, using output from FlowNet2.
+
+optional arguments:
+  -h, --help       show this help message and exit
+  --img IMG        Location of input image sequences.
+  --flo FLO        Location of optical flow files.
+  --pose POSE      Location of pose file.
+  --output OUTPUT  Location of output directory
+
 ```
 
 
