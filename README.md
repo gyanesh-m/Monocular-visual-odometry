@@ -1,7 +1,10 @@
 # GSOC 2018 Project 
 ## Contact:
-Gyanesh Malhotra, f20140495@goa.bits-pilani.ac.in
+Gyanesh Malhotra, gyaneshmalhotra[at]gmail[dot]com
 
+## Slide
+
+Intro to this project: https://drive.google.com/open?id=1FdGI4i0rdbigdb3-JNwicUSgJML_G3AeiMZwncRt4J8
 
 ## Organization :
 Red Hen Lab  
